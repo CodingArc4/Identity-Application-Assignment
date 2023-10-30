@@ -1,6 +1,5 @@
 ﻿using Identity_Application_Assignment.Data;
 using Identity_Application_Assignment.Models;
-using Identity_Application_Assignment.Utility;
 using Identity_Application_Assignment.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -82,7 +81,7 @@ namespace Identity_Application_Assignment.Controllers
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, registerViewModel.RoleName);
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "User");
                 }
                 foreach (var error in result.Errors)

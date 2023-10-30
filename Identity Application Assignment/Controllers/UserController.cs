@@ -124,7 +124,62 @@ namespace Identity_Application_Assignment.Controllers
             return View(model);
         }
 
+        // Delete action to display the confirmation view
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the user is in any roles and remove them
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles != null && userRoles.Any())
+            {
+                foreach (var role in userRoles)
+                {
+                    var results = await _userManager.RemoveFromRoleAsync(user, role);
+                    if (!results.Succeeded)
+                    {
+                        ModelState.AddModelError("", "Failed to remove user from role.");
+                        return View(user);
+                    }
+                }
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
+            return View(user);
+        }
 
     }
 }
