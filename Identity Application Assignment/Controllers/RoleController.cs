@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Identity_Application_Assignment.Models;
+using Identity_Application_Assignment.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Identity_Application_Assignment.Models
+namespace Identity_Application_Assignment.Controllers
 {
     public class RoleController : Controller
     {
@@ -15,6 +17,7 @@ namespace Identity_Application_Assignment.Models
             _user = user;
 
         }
+
         public IActionResult Index()
         {
             var roles = _role.Roles.ToList();
@@ -130,7 +133,7 @@ namespace Identity_Application_Assignment.Models
 
             if (usersWithRole.Count > 0)
             {
-                ModelState.AddModelError("", "Cannot delete role because it is assigned to one or more users.");
+                TempData["ErrorMessage"] = "Cannot delete role because it is assigned to one or more users.";
             }
             else
             {
@@ -146,7 +149,8 @@ namespace Identity_Application_Assignment.Models
                 }
             }
 
-            return View("Delete", role);
+            return RedirectToAction("Delete", new { id });
         }
+
     }
 }

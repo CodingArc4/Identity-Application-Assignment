@@ -4,6 +4,8 @@ using Identity_Application_Assignment.Utility;
 using Identity_Application_Assignment.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Identity_Application_Assignment.Controllers
 {
@@ -47,13 +49,19 @@ namespace Identity_Application_Assignment.Controllers
 
         public async Task<IActionResult> Register()
         {
-            //if roles doesnt exists then create roles
-            if (!_roleManager.RoleExistsAsync(Helper.Admin).GetAwaiter().GetResult())
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            var model = new RegisterViewModel
             {
-                await _roleManager.CreateAsync(new IdentityRole(Helper.Admin));
-                await _roleManager.CreateAsync(new IdentityRole(Helper.User));
-            }
-            return View();
+                // Populate other properties as needed
+                Roles = roles.Select(r => new SelectListItem
+                {
+                    Text = r.Name,
+                    Value = r.Name
+                }).ToList(),
+            };
+
+            return View(model);
         }
 
         //endpoint to register
@@ -75,7 +83,7 @@ namespace Identity_Application_Assignment.Controllers
                 {
                     await _userManager.AddToRoleAsync(user, registerViewModel.RoleName);
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "User");
                 }
                 foreach (var error in result.Errors)
                 {

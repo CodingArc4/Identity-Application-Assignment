@@ -1,0 +1,43 @@
+﻿@model Identity_Application_Assignment.ViewModels.EditUserViewModel
+
+<h2>Edit</h2>
+
+<form method="post" asp-action="Edit" asp-controller="User">
+    <h4>Create a new account.</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="Name"></label>
+        <div class="col-md-10">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="Email"></label>
+        <div class="col-md-10">
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="RoleName"></label>
+        <div class="col-md-10">
+            <select asp-for="RoleName" asp-items="Model.Roles" class="form-control"></select>
+        </div>
+    </div>
+    <br />    
+    <br />
+    <div class="form-group">
+        <div class="col-md-10 offset-md-2">
+            <input type="submit" class="btn btn-success" />
+        </div>
+    </div>
+    <br />
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

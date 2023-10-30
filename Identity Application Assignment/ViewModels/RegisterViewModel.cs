@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Identity_Application_Assignment.ViewModels
 {
@@ -24,5 +25,7 @@ namespace Identity_Application_Assignment.ViewModels
         [Required]
         [Display(Name = "Role Name")]
         public string RoleName { get; set; }
+
+        public List<SelectListItem>? Roles { get; set; }
     }
 }
