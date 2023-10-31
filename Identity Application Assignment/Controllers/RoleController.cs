@@ -1,10 +1,12 @@
 ﻿using Identity_Application_Assignment.Models;
 using Identity_Application_Assignment.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity_Application_Assignment.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
 

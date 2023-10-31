@@ -1,6 +1,7 @@
 ﻿using Identity_Application_Assignment.Data;
 using Identity_Application_Assignment.Models;
 using Identity_Application_Assignment.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -48,6 +49,7 @@ namespace Identity_Application_Assignment.Controllers
             return View(loginViewModel);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Register()
         {
             var roles = await _roleManager.Roles.ToListAsync();
@@ -110,7 +112,8 @@ namespace Identity_Application_Assignment.Controllers
                 if (user != null)
                 {
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var resetPasswordLink = Url.Action(nameof(ResetPassword), "Account", new { email = model.Email ,token = token }, Request.Scheme);
+                    var resetPasswordLink = Url.Action(nameof(ResetPassword),
+                        "Account", new { email = model.Email ,token = token }, Request.Scheme);
                     return RedirectToAction(nameof(ResetPassword), new { email = model.Email,token = token});
                 }
                 ModelState.AddModelError(string.Empty, "User not found. Please check the email address.");
@@ -121,7 +124,6 @@ namespace Identity_Application_Assignment.Controllers
         [HttpGet]
         public IActionResult ResetPassword(string token,string email)
         {
-            //new ResetPasswordVM { Token = token, Email = email };
             return View();
         }
 

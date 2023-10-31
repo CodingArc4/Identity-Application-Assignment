@@ -1,5 +1,6 @@
 ﻿using Identity_Application_Assignment.Models;
 using Identity_Application_Assignment.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity_Application_Assignment.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -23,9 +25,8 @@ namespace Identity_Application_Assignment.Controllers
         //geting users and their roles
         public IActionResult Index()
         {
-            var users = _userManager.Users.ToList(); // Retrieve all users
+            var users = _userManager.Users.ToList(); 
 
-            // Create a list to hold user information including roles
             var userViewModels = new List<UsersViewModel>();
 
             foreach (var user in users)
@@ -60,7 +61,6 @@ namespace Identity_Application_Assignment.Controllers
                 return NotFound();
             }
 
-            // You may need to fetch available roles and add them to the view model
             var roles = await _roleManager.Roles.ToListAsync();
             var userRoles = await _userManager.GetRolesAsync(user);
 
@@ -120,11 +120,10 @@ namespace Identity_Application_Assignment.Controllers
                 }
             }
 
-            // If the ModelState is not valid, return to the edit view with the current model
             return View(model);
         }
 
-        // Delete action to display the confirmation view
+        // Delete action 
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
