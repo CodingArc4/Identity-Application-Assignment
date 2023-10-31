@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace Identity_Application_Assignment.Controllers
 {
@@ -90,6 +92,58 @@ namespace Identity_Application_Assignment.Controllers
                 }
             }
             return View(registerViewModel);
+        }
+
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgetPasswordVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var resetPasswordLink = Url.Action(nameof(ResetPassword), "Account", new { token, email = model.Email }, Request.Scheme);
+                    TempData["ResetPasswordLink"] = resetPasswordLink;
+                    return RedirectToAction(nameof(ResetPassword));
+                }
+                ModelState.AddModelError(string.Empty, "User not found. Please check the email address.");
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string token,string email)
+        {
+            var model = new ResetPasswordVM { Token = token, Email = email };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+
+                    if (result.Succeeded)
+                    {
+                        TempData["SuccessMessage"] = "Your password has been reset. You can now log in with your new password.";
+                        return RedirectToAction(nameof(Login));
+                    }
+                }
+            }
+            return View();
         }
 
         [HttpPost]

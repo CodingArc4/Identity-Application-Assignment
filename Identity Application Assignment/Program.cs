@@ -19,7 +19,11 @@ namespace Identity_Application_Assignment
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(ops => ops.TokenLifespan = TimeSpan.FromHours(5));
 
             var app = builder.Build();
 
