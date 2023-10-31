@@ -110,8 +110,8 @@ namespace Identity_Application_Assignment.Controllers
                 if (user != null)
                 {
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var resetPasswordLink = Url.Action(nameof(ResetPassword), "Account", new { token, email = model.Email }, Request.Scheme);
-                    return RedirectToAction(nameof(ResetPassword), new { token, email = model.Email });
+                    var resetPasswordLink = Url.Action(nameof(ResetPassword), "Account", new { email = model.Email ,token = token }, Request.Scheme);
+                    return RedirectToAction(nameof(ResetPassword), new { email = model.Email,token = token});
                 }
                 ModelState.AddModelError(string.Empty, "User not found. Please check the email address.");
             }
@@ -121,13 +121,14 @@ namespace Identity_Application_Assignment.Controllers
         [HttpGet]
         public IActionResult ResetPassword(string token,string email)
         {
-            var model = new ResetPasswordVM { Token = token, Email = email };
-            return View(model);
+            //new ResetPasswordVM { Token = token, Email = email };
+            return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordVM model)
         {
+
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
