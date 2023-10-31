@@ -20,11 +20,27 @@ namespace Identity_Application_Assignment.Controllers
 
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var roles = _role.Roles.ToList();
-            return View(roles);
+            var roleViewModels = new List<RoleViewModel>();
+
+            foreach (var role in roles)
+            {
+                var roleViewModel = new RoleViewModel
+                {
+                    Id = role.Id,
+                    RoleName = role.Name,
+                    AssignedRoleCount = (await _user.GetUsersInRoleAsync(role.Name)).Count
+                };
+
+                roleViewModels.Add(roleViewModel);
+            }
+
+            return View(roleViewModels);
         }
+
+
 
         public IActionResult Create()
         {
