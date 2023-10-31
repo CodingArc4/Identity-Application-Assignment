@@ -111,8 +111,7 @@ namespace Identity_Application_Assignment.Controllers
                 {
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var resetPasswordLink = Url.Action(nameof(ResetPassword), "Account", new { token, email = model.Email }, Request.Scheme);
-                    TempData["ResetPasswordLink"] = resetPasswordLink;
-                    return RedirectToAction(nameof(ResetPassword));
+                    return RedirectToAction(nameof(ResetPassword), new { token, email = model.Email });
                 }
                 ModelState.AddModelError(string.Empty, "User not found. Please check the email address.");
             }

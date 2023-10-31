@@ -7,6 +7,6 @@ namespace Identity_Application_Assignment.ViewModels
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
-            public string Email { get; set; }
+            public string? Email { get; set; }
     }
 }
