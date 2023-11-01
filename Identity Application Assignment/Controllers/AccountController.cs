@@ -84,8 +84,10 @@ namespace Identity_Application_Assignment.Controllers
                 var result = await _userManager.CreateAsync(user, registerViewModel.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, registerViewModel.RoleName);
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    foreach (var roleName in registerViewModel.RoleName)
+                    {
+                        await _userManager.AddToRoleAsync(user, roleName);
+                    }
                     return RedirectToAction("Index", "User");
                 }
                 foreach (var error in result.Errors)

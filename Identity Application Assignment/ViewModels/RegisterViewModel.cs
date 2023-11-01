@@ -24,7 +24,7 @@ namespace Identity_Application_Assignment.ViewModels
 
         [Required]
         [Display(Name = "Role Name")]
-        public string RoleName { get; set; }
+        public List<string> RoleName { get; set; }
 
         public List<SelectListItem>? Roles { get; set; }
     }

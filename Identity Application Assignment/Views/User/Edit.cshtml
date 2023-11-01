@@ -23,11 +23,14 @@
     </div>
     <br />
     <div class="form-group row">
-        <label class="col-md-2" asp-for="RoleName"></label>
+        <label class="col-md-2" asp-for="RoleName">Select Roles:</label>
         <div class="col-md-10">
-            <select asp-for="RoleName" asp-items="Model.Roles" class="form-control"></select>
+            <select asp-for="RoleName" asp-items="Model.Roles" multiple class="form-control">
+            </select>
+            <span asp-validation-for="RoleName" class="text-danger"></span>
         </div>
     </div>
+
     <br />    
     <br />
     <div class="form-group">

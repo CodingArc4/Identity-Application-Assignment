@@ -17,7 +17,6 @@ namespace Identity_Application_Assignment.Controllers
         {
             _role = role;
             _user = user;
-
         }
 
         public async Task<IActionResult> Index()
@@ -40,13 +39,10 @@ namespace Identity_Application_Assignment.Controllers
             return View(roleViewModels);
         }
 
-
-
         public IActionResult Create()
         {
             return View();
         }
-
 
         //endpoint to create role
         [HttpPost]
